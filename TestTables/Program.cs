@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace TestTables
 {
@@ -22,7 +23,7 @@ namespace TestTables
             var testNamePadding = results.Select(s => s.TestName.Length).OrderBy(l => l).Last();
             var outcomePadding = results.Select(s => s.Outcome.Length).OrderBy(l => l).Last();
 
-            Action<string> setColour = outcome =>
+            Action<string> setResultColour = outcome =>
             {
                 Console.ForegroundColor = outcome switch
                 {
@@ -42,12 +43,25 @@ namespace TestTables
             results.ForEach(f =>
             {
                 Console.Write(f.TestName.PadRight(testNamePadding + 2, ' '));
-                setColour(f.Outcome);
+                setResultColour(f.Outcome);
                 Console.Write(f.Outcome.PadRight(outcomePadding + 2, ' '));
                 Console.ResetColor();
 
                 var time = TimeSpan.Parse(f.Duration);
-                Console.Write($"{time.TotalMilliseconds} ms");
+                Console.Write($"{time.TotalMilliseconds} ms  ");
+
+                if (f.Error != "")
+                {
+                    var err = $"{f.Error.Replace("\n", "")}".Trim();
+
+                    var x = err.Split(' ').ToList().Aggregate("", (a, b) => a.Trim() + " " + b.Trim());
+
+                    Match m = Regex.Match(x, @"^(.+)at.+line\s(\d+)$");
+
+                    string error = $"{m.Groups[1]}Line: {m.Groups[2]}";
+
+                    Console.Write(error);
+                }
 
                 Console.WriteLine();
             });

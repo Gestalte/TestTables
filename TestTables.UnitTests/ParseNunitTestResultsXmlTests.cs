@@ -5,16 +5,6 @@ using System.Linq;
 
 namespace TestTables.UnitTests
 {
-    public class FakeOutputWriter : IOutputWriter
-    {
-        public string OutputSpy { get; set; }
-
-        public void Write(string output)
-        {
-            OutputSpy = output;
-        }
-    }
-
     [TestFixture]
     public class ParseNunitTestResultsXmlTests
     {

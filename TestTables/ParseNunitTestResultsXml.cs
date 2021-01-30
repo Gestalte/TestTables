@@ -61,6 +61,7 @@ namespace TestTables
                  (s.Attribute("testName").Value
                  , s.Attribute("duration").Value
                  , s.Attribute("outcome").Value
+                 ,s.Value
                  ))
                 .ToList();
 
