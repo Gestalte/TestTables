@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -55,13 +56,28 @@ namespace TestTables
             return xElementResults;
         }
 
+        private ErrorInfo MakeError(XElement x)
+        {
+            if (x.Value != "")
+            {
+                var errorInfo = x.Elements().FirstOrDefault().Elements().Where(w => w.Name.LocalName == "ErrorInfo");
+
+                var message = errorInfo.Elements().Where(w => w.Name.LocalName == "Message").FirstOrDefault()?.Value;
+                var stackTrace = errorInfo.Elements().Where(w => w.Name.LocalName == "StackTrace").FirstOrDefault()?.Value;
+
+                return new ErrorInfo(message, stackTrace);
+            }
+
+            return null;
+        }
+
         public List<Result> ConvertToResult(List<XElement> xmlResults)
         {
             var results = xmlResults.Select(s => new Result
                  (s.Attribute("testName").Value
                  , s.Attribute("duration").Value
                  , s.Attribute("outcome").Value
-                 ,s.Value
+                 , MakeError(s)
                  ))
                 .ToList();
 

@@ -6,7 +6,7 @@ namespace TestTables
 {
     public class Result
     {
-        public Result(string testName, string duration, string outcome, string error)
+        public Result(string testName, string duration, string outcome, ErrorInfo error)
         {
             TestName = testName;
             Duration = duration;
@@ -17,6 +17,6 @@ namespace TestTables
         public string TestName { get; set; }
         public string Duration { get; set; }
         public string Outcome { get; set; }
-        public string Error { get; set; }
+        public ErrorInfo Error { get; set; }
     }
 }

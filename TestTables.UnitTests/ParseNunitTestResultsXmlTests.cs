@@ -8,8 +8,7 @@ namespace TestTables.UnitTests
     [TestFixture]
     public class ParseNunitTestResultsXmlTests
     {
-        //public const string TestPath = @"C:\Users\Desktop\Documents\Github\TestTables\TestTables.UnitTests\TestResults\Desktop_DESKTOP-PL78EAO_2021-01-30_17_03_05.trx";
-        public const string TestPath = @"C:\Users\Desktop\Documents\Github\TestTables\TestTables.UnitTests\TestResults\Desktop_DESKTOP-PL78EAO_2021-01-30_20_23_10.trx";
+        public const string TestPath = @"C:\Users\Desktop\Documents\Github\TestTables\TestTables.UnitTests\TestResults\TestResults.trx";
 
         [Test]
         public void LoadXmlFile()
@@ -75,6 +74,12 @@ namespace TestTables.UnitTests
         public void fails()
         {
             true.Should().BeFalse();
+        }
+
+        [Test]
+        public void fails2()
+        {
+            Assert.IsTrue(false);
         }
 
         [Test]

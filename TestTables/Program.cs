@@ -6,7 +6,7 @@ namespace TestTables
 {
     class Program
     {
-        private const string TestPath = @"";
+        private const string TestPath = @"C:\Users\Desktop\Documents\Github\TestTables\TestTables.UnitTests\TestResults\TestResults.trx";
 
         static void Main(string[] args)
         {
@@ -50,17 +50,13 @@ namespace TestTables
                 var time = TimeSpan.Parse(f.Duration);
                 Console.Write($"{time.TotalMilliseconds} ms  ");
 
-                if (f.Error != "")
+                if (f.Error != null)
                 {
-                    var err = $"{f.Error.Replace("\n", "")}".Trim();
+                    var err = $"{f.Error.Message.Replace("\n", "")}".Trim();
 
-                    var x = err.Split(' ').ToList().Aggregate("", (a, b) => a.Trim() + " " + b.Trim());
+                    err = err.Split(' ').ToList().Aggregate("", (a, b) => a.Trim() + " " + b.Trim());
 
-                    Match m = Regex.Match(x, @"^(.+)at.+line\s(\d+)$");
-
-                    string error = $"{m.Groups[1]}Line: {m.Groups[2]}";
-
-                    Console.Write(error);
+                    Console.Write(err);
                 }
 
                 Console.WriteLine();
