@@ -2,15 +2,18 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+
 
 namespace TestTables.UnitTests
 {
     [TestFixture]
     public class ParseDotnetTestResultsXmlTests
     {
-        public const string TestPath = @"C:\Users\Desktop\Documents\Github\TestTables\TestTables.UnitTests\TestResults\TestResults.trx";
+        private readonly string TestPath = ConfigurationHelper.RetrieveTestResultsPath();
 
         public ParseXml ParseXml { get; set; } = new ParseXml();
 

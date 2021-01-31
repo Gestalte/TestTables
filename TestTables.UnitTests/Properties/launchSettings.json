@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "TestTables.UnitTests": {
+      "commandName": "Project"
+    }
+  }
+}
