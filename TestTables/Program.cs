@@ -25,33 +25,33 @@ namespace TestTables
             var testNamePadding = results.Select(s => s.TestName.Length).OrderBy(l => l).Last();
             var outcomePadding = results.Select(s => s.Outcome.Length).OrderBy(l => l).Last();
 
-            Action<string> setResultColour = outcome =>
+            var divider = string.Empty.PadRight(testNamePadding + 2 + outcomePadding + 2 + "Duration".Length + 2, '-');
+
+            // Heading
+            Console.WriteLine($"{"Test Name".PadRight(testNamePadding + 1, ' ')} {"Outcome".PadRight(outcomePadding + 1, ' ')} {"Duration"}");
+            Console.WriteLine(divider);
+
+            // Results
+            results.ForEach(f =>
             {
-                Console.ForegroundColor = outcome switch
+                // Write TestName
+                Console.Write(f.TestName.PadRight(testNamePadding + 2, ' '));
+
+                // Write Outcome
+                Console.ForegroundColor = f.Outcome switch
                 {
                     "Passed" => ConsoleColor.Green,
                     "Failed" => ConsoleColor.Red,
                     "NotExecuted" => ConsoleColor.DarkYellow,
                     _ => ConsoleColor.DarkYellow
                 };
-            };
-
-            // Heading
-            Console.WriteLine($"{"Test Name".PadRight(testNamePadding + 1, ' ')} {"Outcome".PadRight(outcomePadding + 1, ' ')} {"Duration"}");
-
-            Console.WriteLine("");
-
-            // Results
-            results.ForEach(f =>
-            {
-                Console.Write(f.TestName.PadRight(testNamePadding + 2, ' '));
-                setResultColour(f.Outcome);
                 Console.Write(f.Outcome.PadRight(outcomePadding + 2, ' '));
                 Console.ResetColor();
 
-                var time = TimeSpan.Parse(f.Duration);
-                Console.Write($"{time.TotalMilliseconds} ms  ");
+                // Write Time
+                Console.Write($"{TimeSpan.Parse(f.Duration).TotalMilliseconds} ms  ");
 
+                // Write Error
                 if (f.Error != null)
                 {
                     var err = $"{f.Error.Message.Replace("\n", "")}".Trim();
@@ -64,10 +64,15 @@ namespace TestTables
                 Console.WriteLine();
             });
 
-            var counter = summaryCounters.ToList().FirstOrDefault();
+            var counter = summaryCounters.FirstOrDefault();
             Console.WriteLine();
 
             // Summary
+            int total = int.Parse(counter.Total);
+            int passed = int.Parse(counter.Passed);
+            int failed = int.Parse(counter.Failed);
+            int notExecuted = total - passed - failed;
+
             Action<string, string, ConsoleColor> writeSummary = (label, count, color) =>
             {
                 Console.Write(label);
@@ -79,12 +84,7 @@ namespace TestTables
                 Console.ResetColor();
             };
 
-            Func<string, int> convertStringToInt = a => int.Parse(a);
-
-            int total = convertStringToInt(counter.Total);
-            int passed = convertStringToInt(counter.Passed);
-            int failed = convertStringToInt(counter.Failed);
-            int notExecuted = total - passed - failed;
+            Console.WriteLine(divider);
 
             writeSummary("Total: ", counter.Total, ConsoleColor.White);
             writeSummary("Passed: ", counter.Passed, ConsoleColor.Green);
@@ -92,6 +92,8 @@ namespace TestTables
             writeSummary("Not Executed: ", notExecuted.ToString(), ConsoleColor.DarkYellow);
 
             Console.WriteLine();
+
+            Console.WriteLine(divider);
 
             Console.ReadKey();
         }
